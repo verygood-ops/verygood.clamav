@@ -5,6 +5,13 @@ clamav_logsyslog: no
 clamav_selfcheck: 3600
 
 # can be web, s3 or file
-clam_av_definition_install_method: web
+clamav_definition_install_method: web
 
-clam_av_s3_bucket: ""
+clamav_s3_bucket: ""
+
+clamav_web_server: http://db.us.clamav.net/
+clamav_mirrors:
+  - db.us.clamav.net
+  - db.local.clamav.net
+#  - current.cvd.clamav.net
+  - database.clamav.net

@@ -7,10 +7,18 @@
   tags:
     - clamav
 
-- name: Setup config
+- name: Setup /etc/clamav/clamd.conf
   template:
       src=clamd.conf.j2
       dest=/etc/clamav/clamd.conf
+  notify: Restart clamav
+  tags:
+    - clamav
+
+- name: Setup /etc/clamav/freshclam.conf
+  template:
+      src=freshclam.conf.j2
+      dest=/etc/clamav/freshclam.conf
   notify: Restart clamav
   tags:
     - clamav
@@ -25,27 +33,27 @@
   with_items:
     - main.cvd
     - daily.cvd
-  when: clam_av_definition_install_method == 'file'
+  when: clamav_definition_install_method == 'file'
   tags:
     - clamav
   notify: Restart clamav
 
 - name: copy defintions from s3
-  s3: bucket={{ clam_av_s3_bucket }} object=/clamav/{{ item }} dest=/var/lib/clamav/{{ item }} mode=get
+  s3: bucket={{ clamav_s3_bucket }} object=/clamav/{{ item }} dest=/var/lib/clamav/{{ item }} mode=get
   with_items:
     - main.cvd
     - daily.cvd
-  when: clam_av_definition_install_method == 's3'
+  when: clamav_definition_install_method == 's3'
   tags:
     - clamav
   notify: Restart clamav
 
 - name: copy defintions from internet
-  get_url: url=http://database.clamav.net/{{ item }} dest=/var/lib/clamav/{{ item }} mode=0644
+  get_url: url={{ clamav_web_server }}{{ item }} dest=/var/lib/clamav/{{ item }} mode=0644
   with_items:
     - main.cvd
     - daily.cvd
-  when: clam_av_definition_install_method == 'web'
+  when: clamav_definition_install_method == 'web'
   tags:
     - clamav
   notify: Restart clamav
