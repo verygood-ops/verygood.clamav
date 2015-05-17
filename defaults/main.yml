@@ -1,2 +1,10 @@
+---
+
 clamav_logsyslog: no
+
 clamav_selfcheck: 3600
+
+# can be web, s3 or file
+clam_av_definition_install_method: web
+
+clam_av_s3_bucket: ""

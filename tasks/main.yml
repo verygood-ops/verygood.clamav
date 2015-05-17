@@ -4,14 +4,19 @@
   with_items:
     - clamav
     - clamav-daemon
+  tags:
+    - clamav
 
 - name: Setup config
   template:
       src=clamd.conf.j2
       dest=/etc/clamav/clamd.conf
   notify: Restart clamav
+  tags:
+    - clamav
 
-- copy:
+- name: copy definitions from file
+  copy:
     src={{ item }}
     dest=/var/lib/clamav/
     owner=clamav
@@ -20,3 +25,39 @@
   with_items:
     - main.cvd
     - daily.cvd
+  when: clam_av_definition_install_method == 'file'
+  tags:
+    - clamav
+  notify: Restart clamav
+
+- name: copy defintions from s3
+  s3: bucket={{ clam_av_s3_bucket }} object=/clamav/{{ item }} dest=/var/lib/clamav/{{ item }} mode=get
+  with_items:
+    - main.cvd
+    - daily.cvd
+  when: clam_av_definition_install_method == 's3'
+  tags:
+    - clamav
+  notify: Restart clamav
+
+- name: copy defintions from internet
+  get_url: url=http://database.clamav.net/{{ item }} dest=/var/lib/clamav/{{ item }} mode=0644
+  with_items:
+    - main.cvd
+    - daily.cvd
+  when: clam_av_definition_install_method == 'web'
+  tags:
+    - clamav
+  notify: Restart clamav
+
+- name: ensure permissions on defintions are correct
+  file:
+    path=/var/lib/clamav/{{ item }}
+    owner=clamav
+    group=clamav
+    mode=0644
+  with_items:
+    - main.cvd
+    - daily.cvd
+  tags:
+    - clamav
