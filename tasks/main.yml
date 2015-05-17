@@ -1,0 +1,18 @@
+---
+- name: Install
+  apt: name={{ item }}
+  with_items:
+    - clamav
+    - clamav-daemon
+
+- name: Setup virus definition service
+  service:
+    name=clamav-freshclam
+    state=restarted
+    enabled=yes
+
+- name: Setup virus scanning service
+  service:
+    name=clamav-daemon
+    state=restarted
+    enabled=yes
