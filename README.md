@@ -1,7 +1,9 @@
 Role Name
 =========
 
-This roles setup a Clamav
+This roles setup a Clamav. It uses the two clamav daemons for scanning and keeping the definitions up to date.
+Because clamav-daemon doesn't want to start without a definition database ready, and we don't want to wait for it
+to download one it's included in the role and copied over.
 
 Requirements
 ------------
