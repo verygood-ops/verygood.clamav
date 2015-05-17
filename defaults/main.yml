@@ -1,0 +1,2 @@
+clamav_logsyslog: no
+clamav_selfcheck: 3600

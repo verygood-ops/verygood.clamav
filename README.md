@@ -11,7 +11,12 @@ This role is only tested on Ubuntu trusty. ClamAV eats up about 300mb of ram.
 Role Variables
 --------------
 
+Defaults are shown below
 
+```yml
+clamav_logsyslog: no
+clamav_selfcheck: 3600
+```
 
 Example Playbook
 ----------------

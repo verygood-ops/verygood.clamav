@@ -5,6 +5,14 @@
     - clamav
     - clamav-daemon
 
+- name: Setup config
+  template:
+      src=clamd.conf.j2
+      dest=/etc/clamav/clamd.conf
+
+- name: Get definitions
+  command: freshclam
+
 - name: Setup virus definition service
   service:
     name=clamav-freshclam
